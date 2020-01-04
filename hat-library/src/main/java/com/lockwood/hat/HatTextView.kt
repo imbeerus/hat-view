@@ -18,11 +18,16 @@ package com.lockwood.hat
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.widget.addTextChangedListener
 
 @SuppressLint("Recycle")
@@ -78,7 +83,7 @@ open class HatTextView @JvmOverloads constructor(
             0
         ).apply {
             try {
-                hat = getDrawable(R.styleable.HatTextView_hat)
+                hat = getCompatDrawable(R.styleable.HatTextView_hat)
                 hatPadding = getDimensionPixelSize(R.styleable.HatTextView_hatPadding, 0)
             } finally {
                 recycle()
@@ -111,6 +116,21 @@ open class HatTextView @JvmOverloads constructor(
             requestLayout()
             onSizeChanged(width, height, 0, 0)
         }
+    }
+
+    private fun TypedArray.getCompatDrawable(drawableIndex: Int): Drawable? {
+        return try {
+            val drawableResId = getResourceIdOrThrow(drawableIndex)
+            AppCompatResources.getDrawable(context, drawableResId)
+        } catch (e: Exception) {
+            Log.e(TAG, e.message.toString())
+            null
+        }
+    }
+
+    companion object {
+
+        val TAG: String = HatTextView::class.java.simpleName
     }
 
 }

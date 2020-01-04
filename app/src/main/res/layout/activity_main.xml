@@ -24,15 +24,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Hello World!"
+            android:text="Argh!"
             android:textSize="42sp"
-            app:hat="@drawable/ic_hat_student" />
+            app:hat="@drawable/ic_hat_pirate" />
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-
             android:orientation="vertical">
 
             <androidx.appcompat.widget.AppCompatTextView
