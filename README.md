@@ -36,7 +36,7 @@ allprojects {
 ```
 ```
 dependencies {
-    	implementation 'com.github.lndmflngs:hat-view:1.0.0'
+    	implementation 'com.github.lndmflngs:hat-view:1.0.1'
 }
 ```
 ## Issue Tracking
