@@ -22,7 +22,9 @@ import android.graphics.PixelFormat
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.widget.TextView
+import androidx.annotation.ColorInt
 import androidx.annotation.Px
+import com.lockwood.hat.extensions.tint
 
 class HatDrawable private constructor(
     private val drawable: Drawable,
@@ -30,6 +32,14 @@ class HatDrawable private constructor(
     private val height: Int,
     private val padding: Int
 ) : Drawable() {
+
+    companion object {
+
+        const val PADDING_DEFAULT = 0
+        const val TINT_DEFAULT = 0
+
+        private const val DEFAULT_OPACITY = PixelFormat.TRANSLUCENT
+    }
 
     override fun draw(canvas: Canvas) {
         drawable.draw(canvas)
@@ -40,7 +50,9 @@ class HatDrawable private constructor(
         val top = bounds.top
         val bottom = top + height
         val right = left + intrinsicWidth
+
         val drawableBounds = Rect(left, top, right, bottom)
+
         drawable.bounds = drawableBounds
     }
 
@@ -52,45 +64,94 @@ class HatDrawable private constructor(
         drawable.alpha = alpha
     }
 
-    override fun getIntrinsicWidth(): Int = width
+    override fun getIntrinsicWidth(): Int {
+        return width
+    }
 
-    override fun getIntrinsicHeight(): Int = (height shr 1) + padding
+    override fun getIntrinsicHeight(): Int {
+        val halfHeight = height / 2
+        return (halfHeight) + padding
+    }
 
-    override fun getOpacity(): Int = PixelFormat.TRANSLUCENT
+    override fun getOpacity(): Int {
+        return DEFAULT_OPACITY
+    }
 
     data class Builder(
         var textView: TextView? = null,
         var width: Int? = null,
         var height: Int? = null,
-        var padding: Int = 0
+        var padding: Int = PADDING_DEFAULT,
+        var tint: Int = TINT_DEFAULT
     ) {
-        fun padding(@Px padding: Int) = apply { this.padding = padding }
 
-        fun build(textView: TextView, drawable: Drawable): HatDrawable {
+        fun padding(
+            @Px paddingToSet: Int
+        ): Builder {
+            return apply { padding = paddingToSet }
+        }
+
+        fun tint(
+            @ColorInt tintToSet: Int
+        ): Builder {
+            return apply { tint = tintToSet }
+        }
+
+        fun build(
+            textView: TextView,
+            drawable: Drawable
+        ): HatDrawable {
+
             val firstChar = textView.text?.firstOrNull()
+
             if (firstChar != null) {
-                val dWidth = drawable.intrinsicWidth.toFloat()
-                val dHeight = drawable.intrinsicHeight.toFloat()
-                val aspectRatio =  dHeight / dWidth
-                width = textView.measureCharWidth(firstChar.toString())
-                height = (width!! * aspectRatio).toInt()
+
+                with(drawable) {
+                    val intrinsicWidth = intrinsicWidth.toFloat()
+                    val intrinsicHeight = intrinsicHeight.toFloat()
+
+                    val aspectRatio = intrinsicHeight / intrinsicWidth
+
+                    val charToMeasure = firstChar.toString()
+                    val firstCharWidth = measureCharWidth(textView, charToMeasure)
+
+                    width = firstCharWidth
+                    height = (requireNotNull(width) * aspectRatio).toInt()
+                }
             } else {
-                width = drawable.intrinsicWidth
-                height = drawable.intrinsicHeight
+
+                with(drawable) {
+
+                    width = intrinsicWidth
+                    height = intrinsicHeight
+                }
             }
-            return HatDrawable(drawable, width!!, height!!, padding)
+
+            val tintDrawable = if (tint != TINT_DEFAULT) {
+                drawable.tint(tint)
+            } else {
+                drawable
+            }
+
+            return HatDrawable(
+                drawable = tintDrawable,
+                width = requireNotNull(width),
+                height = requireNotNull(height),
+                padding = padding
+            )
         }
 
         // measure char width based on textView textPaint
-        private fun TextView.measureCharWidth(char: String): Int {
+        private fun measureCharWidth(
+            textView: TextView,
+            char: String
+        ): Int {
             val textBounds = Rect()
-            val textPaint = paint.apply {
-                isAntiAlias = true
-                textSize = this.textSize
-                typeface = this.typeface
-            }
+            val textPaint = textView.paint
             textPaint.getTextBounds(char, 0, 1, textBounds)
-            return textPaint.measureText(char).toInt()
+
+            val charWidth = textPaint.measureText(char)
+            return charWidth.toInt()
         }
     }
 

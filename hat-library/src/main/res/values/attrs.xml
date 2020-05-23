@@ -3,5 +3,6 @@
     <declare-styleable name="HatTextView">
         <attr name="hat" format="reference" />
         <attr name="hatPadding" format="dimension" />
+        <attr name="hatLikeTextColor" format="boolean" />
     </declare-styleable>
 </resources>
