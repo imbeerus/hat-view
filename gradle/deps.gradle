@@ -1,0 +1,17 @@
+ext.deps = [:]
+
+def versions = [:]
+versions.kotlin = "1.3.72"
+versions.ktx = "1.4.0-alpha01"
+versions.appcompat = "1.3.0-alpha01"
+versions.material = "1.2.0-alpha06"
+
+def android = [:]
+android.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
+android.material = "com.google.android.material:material:$versions.material"
+android.ktx = "androidx.core:core-ktx:$versions.ktx"
+deps.android = android
+
+def kotlin = [:]
+kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
+deps.kotlin = kotlin

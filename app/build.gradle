@@ -1,37 +1,12 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-
-android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.2"
-    defaultConfig {
-        applicationId "com.lockwood.hatdemo"
-        minSdkVersion 15
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-    }
-    buildTypes {
-        debug {
-            applicationIdSuffix ".debug"
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-}
+apply from: rootProject.file('gradle/android/app.gradle')
+apply from: rootProject.file('gradle/deps.gradle')
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation 'com.google.android.material:material:1.2.0-alpha03'
-    implementation project(path: ':hat-library')
-//    implementation 'com.github.lndmflngs:hat-view:1.0.0'
+    implementation(
+            deps.kotlin.stdlib,
+            deps.android.appcompat,
+            deps.android.material
+    )
+
+    implementation project(':hat-library')
 }

@@ -1,0 +1,7 @@
+apply plugin: 'com.github.dcendents.android-maven'
+
+group = 'com.github.lndmflngs'
+
+repositories {
+    mavenCentral()
+}

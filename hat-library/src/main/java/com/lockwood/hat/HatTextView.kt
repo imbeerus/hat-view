@@ -26,7 +26,6 @@ import android.util.AttributeSet
 import android.util.Log
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.getResourceIdOrThrow
 import androidx.core.widget.addTextChangedListener
 
