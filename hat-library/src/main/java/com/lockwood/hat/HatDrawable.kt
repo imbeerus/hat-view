@@ -78,7 +78,6 @@ class HatDrawable private constructor(
     }
 
     data class Builder(
-        var textView: TextView? = null,
         var width: Int? = null,
         var height: Int? = null,
         var padding: Int = PADDING_DEFAULT,
